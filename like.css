@@ -1,0 +1,241 @@
+@import url('https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&display=swap');
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f2acac;
+  font-family: 'Mochiy Pop P One', sans-serif;
+}
+input#open {
+  display: none;
+}
+
+.valentines-day-card {
+  position: relative;
+  width: 500px;
+  height: 500px;
+  transform-style: preserve-3d;
+  transform: perspective(2500px);
+  transition: .3s;
+}
+
+.card-front {
+  position: relative;
+  background-color: #fff0f3;
+  width: 500px;
+  height: 500px;
+  transform-origin: left;
+  box-shadow: inset 150px 30px 150px rgba(0,0,0,.15), 40px 0 60px rgba(0,0,0,0.3);
+  transition: .3s;
+}
+
+.card-front:before {
+  content:"";
+  position: absolute;
+  width: 480px;
+  height: 480px;
+  background-color: #d04e4e;
+  top: 10px;
+  left: 10px;
+}
+
+.card-inside {
+  position: absolute;
+  background-color: #fff0f3;
+  width: 500px;
+  height: 500px;
+  z-index:-1;
+  left:0;
+  top:0;
+  box-shadow: inset 150px 30px 150px rgba(0,0,0,0.22), 120px 30px 120px rgba(0,0,0,0.1);
+}
+
+.open {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  left:0;
+  top:0;
+  background-color: transparent;
+  z-index:6;
+  cursor: pointer;
+}
+
+#open:checked ~ .card-front {
+  transform: rotateY(-155deg);
+  box-shadow: inset 150px 30px 150px rgba(0,0,0,.13), 40px 0 60px rgba(0,0,0,0.1);
+}
+
+#open:checked ~ .card-front:before {
+  z-index:5;
+  background-color: #fff0f3;
+  width:500px;
+  height:500px;
+  top:0;
+  left:0;
+  box-shadow: inset 150px 30px 150px rgba(0,0,0,.1), 40px 0 60px rgba(0,0,0,0.1);
+}
+
+.note {
+  position: relative;
+  width: 320px;
+  height: 240px;
+  background-color: #fff0f3;
+  top:130px;
+  left:90px;
+  color: #333;
+  font-size:40px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  filter: drop-shadow(0 0 25px rgba(0,0,0,0.3));
+}
+
+.note:before, .note:after {
+  position: absolute;
+  content:"";
+  background-color: #ba1c1c;
+  width: 60px;
+  height:60px;
+}
+
+.note:before {
+  transform: rotate(-45deg);
+  top:-30px;
+  left:130px;
+}
+
+.note:after {
+  border-radius:50%;
+  top:-55px;
+  left:115px;
+  box-shadow:40px 0 #ba1c1c;
+}
+
+.text-one {
+  position: absolute;
+  color: #333;
+  font-size: 40px;
+  top:40px;
+  width:500px;
+  text-align: center;
+}
+
+.text-one:before, .text-one:after {
+  position: absolute;
+  left:5px;
+  text-align: center;
+  width:500px;
+}
+
+.text-one:before {
+  content:"Soryyyyyyyyy";
+  top:40px;
+  color: #d04e4e;
+}
+
+.text-one:after {
+  content:"meriiii biliiiii❤️🐱 lyy♾️🧿";
+  top:80px;
+}
+
+.heart {
+  position: relative;
+  background-color: #d04e4e;
+  height: 100px;
+  width:100px;
+  top:300px;
+  left:200px;
+  transform: rotate(-45deg);
+  animation: .8s beat infinite;
+}
+  
+.heart:before, .heart:after {
+  content:"";
+  background-color: #d04e4e;
+  border-radius:50%;
+  height: 100px;
+  width: 100px;
+  position: absolute;
+}
+  
+.heart:before {
+  top:-50px;
+  left:0;
+}
+  
+.heart:after {
+  left:50px;
+  top:0;
+}
+
+.smile {
+  position: absolute;
+  width:50px;
+  height:25px;
+  background-color: #333;
+  z-index:1;
+  border-radius: 0 0 100px 100px;
+  top:320px;
+  left:225px;
+  overflow: hidden;
+}
+
+.smile:before {
+  content:"";
+  position: absolute;
+  border-radius:50%;
+  width:30px;
+  height:30px;
+  background-color: #030202;
+  top:5px;
+  left:10px;
+}
+
+.eyes {
+  position: absolute;
+  border-radius: 50%;
+  background-color: #333;
+  width:15px;
+  height:15px;
+  z-index:1;
+  top:300px;
+  left:265px;
+  box-shadow: -70px 0 #333;
+  transform-origin: 50%;
+  animation: close 2s infinite;
+}
+.left-message {
+  position: absolute;
+  top: 50px;
+  left: 20px;
+  width: 45%;
+  height: 90%;
+  padding: 20px;
+  font-size: 22px;
+  line-height: 1.4;
+  color: #333;
+  text-align: left;
+  font-family: 'Mochiy Pop P One', sans-serif;
+  white-space: pre-line; /* keeps line breaks */
+}
+
+
+@keyframes close {
+    0%, 100% {
+        transform: scale(1, .05);
+    }
+    5%, 95% {
+        transform: scale(1, 1);
+    }
+}
+
+@keyframes beat {
+  0%, 40%, 100% {
+    transform: scale(1) rotate(-45deg);
+  }
+  25%, 60% {
+    transform: scale(1.1) rotate(-45deg);
+  }
+}

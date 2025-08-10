@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Love Card — No Scroll Left Page</title>
+<link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&display=swap" rel="stylesheet" />
+<style>
+  /* One knob to resize everything */
+  :root { --card: clamp(820px, 86vmin, 1200px); }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; height: 100vh;
+    display: flex; justify-content: center; align-items: center;
+    background: #f2acac; font-family: 'Mochiy Pop P One', sans-serif;
+  }
+  input#open { display: none; }
+
+  .valentines-day-card {
+    position: relative; width: var(--card); height: var(--card);
+    transform-style: preserve-3d; transform: perspective(2600px);
+  }
+
+  /* FRONT COVER */
+  .card-front {
+    position: relative; width: 100%; height: 100%; background: #fff0f3;
+    transform-origin: left; z-index: 5; transition: .4s;
+    box-shadow: inset 180px 36px 180px rgba(0,0,0,.15), 46px 0 70px rgba(0,0,0,.32);
+    backface-visibility: hidden;
+  }
+  .card-front:before { content: ""; position: absolute; inset: 12px; background: #d04e4e; }
+
+  .note {
+    position: absolute; width: calc(var(--card) * 0.64); height: calc(var(--card) * 0.48);
+    background: #fff0f3; top: calc(var(--card) * 0.26); left: calc(var(--card) * 0.18);
+    color: #333; font-size: calc(var(--card) * 0.085);
+    display: flex; align-items: center; justify-content: center; text-align: center;
+    filter: drop-shadow(0 0 28px rgba(0,0,0,.3));
+  }
+  .note:before, .note:after {
+    content: ""; position: absolute; background: #ba1c1c;
+    width: calc(var(--card) * 0.12); height: calc(var(--card) * 0.12);
+  }
+  .note:before { transform: rotate(-45deg); top: calc(-1 * var(--card) * 0.06); left: 50%; translate: -50% 0; }
+  .note:after  { border-radius: 50%; top: calc(-1 * var(--card) * 0.11); left: calc(50% - var(--card) * 0.06);
+                 box-shadow: calc(var(--card) * 0.12) 0 #ba1c1c; }
+
+  /* click area */
+  .open { position: absolute; inset: 0; z-index: 6; cursor: pointer; background: transparent; }
+
+  /* INSIDE SPREAD */
+  .card-inside {
+    position: absolute; inset: 0; background: #fff0f3; z-index: 1;
+    box-shadow: inset 180px 36px 180px rgba(0,0,0,.22), 140px 36px 130px rgba(0,0,0,.12);
+    overflow: hidden; /* everything stays inside the card */
+  }
+
+  /* pages */
+  .inside-left, .inside-right {
+    position: absolute; top: 0; height: 100%; width: 50%;
+    padding: calc(var(--card) * 0.045); /* a bit tighter to gain space */
+    transition: opacity .35s .1s, transform .35s .1s;
+  }
+  .inside-left  { left: 0;  text-align: left;  z-index: 1; }
+  .inside-right { left: 50%; text-align: center; z-index: 2;
+                  display: flex; align-items: center; justify-content: center; overflow: hidden; }
+
+  /* reveal inside after opening */
+  .card-inside .inside-left, .card-inside .inside-right {
+    opacity: 0; transform: translateY(10px); pointer-events: none;
+  }
+  #open:checked ~ .card-inside .inside-left,
+  #open:checked ~ .card-inside .inside-right {
+    opacity: 1; transform: none; pointer-events: auto;
+  }
+
+  /* spine */
+  .gutter {
+    position: absolute; top: 0; left: 50%; width: 2px; height: 100%; transform: translateX(-1px);
+    background: linear-gradient(to right, rgba(0,0,0,.05), rgba(0,0,0,.08), rgba(0,0,0,.05));
+    filter: blur(.5px);
+  }
+
+  /* LEFT PAGE MESSAGE — tuned to fit, no scrollbar */
+  .left-message {
+    width: 100%; height: 100%;
+    padding-right: calc(var(--card) * 0.02);
+    font-size: clamp(14px, calc(var(--card) * 0.022), 20px); /* slightly smaller */
+    line-height: 1.8; color: #333; white-space: pre-line;
+    hyphens: auto;
+    overflow: hidden;               /* <- no scrollbar */
+  }
+
+  /* RIGHT PAGE CONTENT */
+  .right-content { width: 86%; max-width: calc(var(--card) * 0.48); margin: 0 auto; }
+  .text-one {
+    margin: 0; line-height: 1.15; color: #333;
+    font-size: clamp(24px, calc(var(--card) * 0.07), 46px);
+    word-break: break-word; overflow-wrap: anywhere; white-space: normal;
+  }
+  .text-one .red { color: #d04e4e; }
+
+  .heart {
+    position: relative; width: calc(var(--card) * 0.20); height: calc(var(--card) * 0.20);
+    margin: calc(var(--card) * 0.06) auto 0; background: #d04e4e;
+    transform: rotate(-45deg); animation: .8s beat infinite;
+  }
+  .heart:before, .heart:after {
+    content: ""; position: absolute; width: 100%; height: 100%;
+    background: #d04e4e; border-radius: 50%;
+  }
+  .heart:before { top: -50%; left: 0; }  .heart:after { left: 50%; top: 0; }
+
+  .smile {
+    position: absolute; left: 50%; top: 50%;
+    width: calc(var(--card) * 0.10); height: calc(var(--card) * 0.05);
+    transform: translate(-50%,-10%) rotate(45deg);
+    background: #333; border-radius: 0 0 100px 100px; overflow: hidden; z-index: 1;
+  }
+  .smile:before {
+    content: ""; position: absolute; left: 50%; top: 45%;
+    width: calc(var(--card) * 0.06); height: calc(var(--card) * 0.06);
+    transform: translate(-50%,-50%); background: #030202; border-radius: 50%;
+  }
+  .eyes {
+    position: absolute; left: 50%; top: 50%;
+    width: calc(var(--card) * 0.03); height: calc(var(--card) * 0.03);
+    transform: translate(-50%,-62%) rotate(45deg);
+    background: #333; border-radius: 50%; z-index: 1;
+    box-shadow: calc(-1 * var(--card) * 0.09) 0 #333, calc(var(--card) * 0.09) 0 #333;
+    animation: close 2s infinite;
+  }
+
+  /* cover opening + stacking */
+  #open:checked ~ .card-front {
+    transform: rotateY(-155deg);
+    box-shadow: inset 180px 36px 180px rgba(0,0,0,.13), 46px 0 70px rgba(0,0,0,.12);
+    z-index: 0;
+  }
+  #open:checked ~ .card-front:before { z-index: 0; background: #fff0f3; inset: 0; }
+
+  @keyframes close {
+    0%,100% { transform: translate(-50%,-62%) rotate(45deg) scale(1,.05); }
+    5%,95%  { transform: translate(-50%,-62%) rotate(45deg) scale(1,1); }
+  }
+  @keyframes beat {
+    0%,40%,100% { transform: scale(1) rotate(-45deg); }
+    25%,60%     { transform: scale(1.1) rotate(-45deg); }
+  }
+</style>
+</head>
+<body>
+  <div class="valentines-day-card">
+    <input id="open" type="checkbox" />
+    <label class="open" for="open" title="Click to open/close"></label>
+
+    <!-- FRONT COVER -->
+    <div class="card-front">
+      <div class="note">For my Pyari Aisha Jan</div>
+    </div>
+
+    <!-- INSIDE SPREAD -->
+    <div class="card-inside">
+      <span class="gutter" aria-hidden="true"></span>
+
+      <!-- LEFT PAGE (white page with your message) -->
+      <div class="inside-left">
+        <div class="left-message">
+Pyari Jan , I’m really sorry for leaving you alone earlier, especially when I know you’re not feeling your best. I should have been right there beside you, making sure you felt cared for and loved. I feel awful knowing I let you down . You mean everything to me, and I never want you to feel ignored. I sent you those chocolates as a small way to bring a smile to your face, but what I really want is to be the one holding you, keeping you warm, and making you feel better. Please forgive me, my love… I’m here now, ready to make it up to you in every way I can.  ❤️
+<br>
+Asad Imam       
+</div>
+      </div>
+
+      <!-- RIGHT PAGE -->
+      <div class="inside-right">
+        <div class="right-content">
+          <div class="text-one">
+            I am<br/>
+            <span class="red">Soryyy</span><br/>
+            Meri Pyari Jan 😭😭
+          </div>
+
+          <div class="heart">
+            <div class="smile"></div>
+            <div class="eyes"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- whole cover clickable -->
+    <label class="open" for="open" aria-label="open card"></label>
+  </div>
+</body>
+</html>
